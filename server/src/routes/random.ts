@@ -177,7 +177,15 @@ router.get('/today', async (req, res) => {
       orderBy: { createdAt: 'desc' },
     });
     
-    res.json(records);
+    // 解析 JSON 字段
+    const parsed = records.map(r => ({
+      ...r,
+      drink: r.drink ? { ...r.drink, images: JSON.parse(r.drink.images || '[]'), mealTags: JSON.parse(r.drink.mealTags || '[]') } : null,
+      staple: r.staple ? { ...r.staple, images: JSON.parse(r.staple.images || '[]'), mealTags: JSON.parse(r.staple.mealTags || '[]') } : null,
+      dish: r.dish ? { ...r.dish, images: JSON.parse(r.dish.images || '[]'), mealTags: JSON.parse(r.dish.mealTags || '[]') } : null,
+    }));
+    
+    res.json(parsed);
   } catch (error) {
     console.error('获取今日记录失败:', error);
     res.status(500).json({ error: '获取今日记录失败' });
