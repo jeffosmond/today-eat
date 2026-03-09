@@ -1,0 +1,54 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Dish {
+  id        Int      @id @default(autoincrement())
+  name      String
+  images    String   @default("[]")
+  duration  Int?
+  type      String
+  mealTags  String   @default("[]")
+  enabled   Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recordsDrink  Record[] @relation("DrinkRecords")
+  recordsStaple Record[] @relation("StapleRecords")
+  recordsDish   Record[] @relation("DishRecords")
+
+  @@index([type])
+  @@index([enabled])
+}
+
+model Record {
+  id        Int      @id @default(autoincrement())
+  drinkId   Int?
+  stapleId  Int?
+  dishId    Int?
+  date      String
+  mealType  String
+  confirmed Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  drink  Dish? @relation("DrinkRecords", fields: [drinkId], references: [id])
+  staple Dish? @relation("StapleRecords", fields: [stapleId], references: [id])
+  dish   Dish? @relation("DishRecords", fields: [dishId], references: [id])
+
+  @@unique([date, mealType])
+  @@index([date])
+  @@index([mealType])
+}
+
+model Setting {
+  key       String   @id
+  value     String
+  updatedAt DateTime @updatedAt
+}
