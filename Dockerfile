@@ -15,10 +15,14 @@ FROM node:20-alpine AS server-builder
 WORKDIR /app/server
 
 COPY server/package*.json ./
-RUN apk add --no-cache openssl-libs
+
+# 安装 Prisma 依赖
+RUN apk add --no-cache openssl
+
 RUN npm install
 
 COPY server/ ./
+
 RUN npx prisma generate
 RUN npm run build
 
@@ -27,10 +31,9 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# 安装运行时依赖和 OpenSSL
-RUN apk add --no-cache openssl-libs
-
 # 安装运行时依赖
+RUN apk add --no-cache openssl
+
 COPY server/package*.json ./
 RUN npm install --production
 

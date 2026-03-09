@@ -13,12 +13,12 @@ app.use(cors());
 app.use(express.json());
 
 // 上传文件服务（必须在前端路由之前）
-const uploadsPath = path.join(__dirname, '../../uploads');
+const uploadsPath = '/app/uploads';
 console.log('上传文件路径:', uploadsPath);
 app.use('/uploads', express.static(uploadsPath));
 
 // 静态文件服务（前端构建产物）
-const clientDistPath = path.join(__dirname, '../../client/dist');
+const clientDistPath = '/app/client/dist';
 console.log('前端文件路径:', clientDistPath);
 app.use(express.static(clientDistPath));
 
