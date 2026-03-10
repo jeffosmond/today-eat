@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  app:
+    build: ./end
+    container_name: today-eat
+    ports:
+      - "3001:3001"
+    volumes:
+      - meal-uploads:/app/uploads
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mysql://rm-cn-0yc4ouy8x00020go.rwlb.rds.aliyuncs.com:3306/today-eat?useSSL=true&serverTimezone=Asia/Singapore&characterEncoding=utf8&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=openclaw
+      - SPRING_DATASOURCE_PASSWORD=OpenClaw0309
+    restart: unless-stopped
+
+volumes:
+  meal-uploads:
